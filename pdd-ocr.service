@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=/home/ubuntu/application/pududuk/store_crawling
-ExecStart=source .venv/bin/activate && uv run app.py
+ExecStart=startup.sh
 Restart=on-failure
 
 [Install]
