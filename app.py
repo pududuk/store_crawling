@@ -10,18 +10,12 @@ ocr_kr = PaddleOCR(
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    det_model_dir='models/kor/det',
-    rec_model_dir='models/kor/rec',
-    cls_model_dir='models/kor/cls'
 )
 ocr_en = PaddleOCR(
     lang="en",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    det_model_dir='models/en/det',
-    rec_model_dir='models/en/rec',
-    cls_model_dir='models/en/cls'
 )
 
 def ocr_ourhome(file):
