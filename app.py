@@ -207,7 +207,7 @@ def cjfresh():
     # POST
     menu_meta = {"corners": menu_corners_list, "names": menu_names_list}
     thread = threading.Thread(target=post_image, args=(menu_images_list, menu_meta, backend_url))
-    thread.daemon = True
+    # thread.daemon = True
     thread.start()
 
     # return
