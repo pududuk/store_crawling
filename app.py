@@ -1,4 +1,4 @@
-backend_url = "http://127.0.0.1:8001/test" ###### 변현섭님께 받기
+backend_url = "http://34.64.137.143:8080/api/menu/ocr-response"
 
 ##### 이 것을 구현
 from PIL import Image
