@@ -45,12 +45,12 @@ def ocr_ourhome(file):
         menu_corners = ["B1", "B1", "B1"]
     else:
         menu_corners = [
-            ocr_en.predict(np.repeat(img_y_split[:500, :, None], 3, axis=-1))[0]["rec_texts"][0]
+            ocr_en.predict(np.repeat(img_y_split[:500, :, None][::2, ::2], 3, axis=-1))[0]["rec_texts"][0]
             for img_y_split in img_y_splits
         ]
 
     menu_names = [
-        ocr_kr.predict(np.repeat(img_y_split[800:1000, :, None], 3, axis=-1))[0]["rec_texts"][0]
+        ocr_kr.predict(np.repeat(img_y_split[800:1000, :, None][::2, ::2], 3, axis=-1))[0]["rec_texts"][0]
         for img_y_split in img_y_splits
     ]
 
@@ -84,7 +84,7 @@ def ocr_cjfresh(file):
     img_y = np.array(img_pil.convert("L"))
     img_y[np.where(img_y < 240)] = 0
     img_y[np.where(img_y > 0)] = 255
-    menu_corners = [ocr_en.predict(np.repeat(img_y[:250, :500, None], 3, axis=-1))[0]["rec_texts"][0]]
+    menu_corners = [ocr_en.predict(np.repeat(img_y[:250, :500, None][::2, ::2], 3, axis=-1))[0]["rec_texts"][0]]
     w_l = np.where(img_y[:, :500].mean(axis=0) > 200)[0][-1].item()
     w_r = np.where(img_y[:, 500:].mean(axis=0) > 200)[0][0].item() + 500
     h_t = np.where(img_y[:500, :].mean(axis=1) > 200)[0][-1].item()
@@ -94,7 +94,7 @@ def ocr_cjfresh(file):
     img_g = img[..., 1].copy()
     img_g[np.where(img_g > 150)] = 255
     img_g[np.where(img_g < 130)] = 255
-    menu_names = ["".join(ocr_kr.predict(np.repeat(img_g[400:1000, 1100:1850, None], 3, axis=-1))[0]["rec_texts"])]
+    menu_names = ["".join(ocr_kr.predict(np.repeat(img_g[400:1000, 1100:1850, None][::2, ::2], 3, axis=-1))[0]["rec_texts"])]
     return menu_imgs, menu_corners, menu_names
 
 ### 아래는 건들지 말기
