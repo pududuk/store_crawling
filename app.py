@@ -4,22 +4,27 @@ backend_url = "http://127.0.0.1:8001/test" ###### 변현섭님께 받기
 from PIL import Image
 import numpy as np
 from paddleocr import PaddleOCR
+import os
 
 ocr_kr = PaddleOCR(
     lang="korean",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir='PP-OCRv5_server_det',
-    text_recognition_model_dir='PP-OCRv5_server_rec',
+    text_detection_model_dir='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_name='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_recognition_model_dir='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec',
+    text_recognition_model_name='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec',
 )
 ocr_en = PaddleOCR(
     lang="en",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir='PP-OCRv5_server_det',
-    text_recognition_model_dir='PP-OCRv5_server_rec',
+    text_detection_model_dir='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_name='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_recognition_model_dir='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec',
+    text_recognition_model_name='/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec',
 )
 
 def ocr_ourhome(file):
