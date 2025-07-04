@@ -138,6 +138,31 @@ def post_image(image_bytesio_list, image_meta, url):
     form_data = image_meta
     r = requests.post(url, files=files, data=form_data)
 
+def ocr_and_post(menu_urls, ocr_fn):
+    # url -> image
+    imgs = []
+    for menu_url in menu_urls:
+        if menu_url:
+            r = requests.get(menu_url)
+            if r.status_code == requests.codes.ok:
+                imgs.append(BytesIO(r.content))
+                r.close()
+            else:
+                r.close()
+    # ocr
+    menu_images_list = []
+    menu_corners_list = []
+    menu_names_list = []
+    for img in imgs:
+        menu_images, menu_corners, menu_names = ocr_fn(img)
+        menu_images_list.extend(menu_images)
+        menu_corners_list.extend(menu_corners)
+        menu_names_list.extend(menu_names)
+
+    # POST
+    menu_meta = {"corners": menu_corners_list, "names": menu_names_list}
+    post_image(menu_images_list, menu_meta, backend_url)
+
 @app.route('/test', methods=["POST"])
 def test():
     print("data : ", request.form)
@@ -149,30 +174,7 @@ def ourhome():
     args = request.args.to_dict()
     menu_urls = [args.get(f"menu_url_{i}") for i in range(1, 7)]
 
-    # url -> image
-    imgs = []
-    for menu_url in menu_urls:
-        if menu_url:
-            r = requests.get(menu_url)
-            if r.status_code == requests.codes.ok:
-                imgs.append(BytesIO(r.content))
-                r.close()
-            else:
-                r.close()
-    # ocr
-    menu_images_list = []
-    menu_corners_list = []
-    menu_names_list = []
-    for img in imgs:
-        menu_images, menu_corners, menu_names = ocr_ourhome(img)
-        menu_images_list.extend(menu_images)
-        menu_corners_list.extend(menu_corners)
-        menu_names_list.extend(menu_names)
-
-    # POST
-    menu_meta = {"corners": menu_corners_list, "names": menu_names_list}
-    thread = threading.Thread(target=post_image, args=(menu_images_list, menu_meta, backend_url))
-    thread.daemon = True
+    thread = threading.Thread(target=ocr_and_post, args=(menu_urls, ocr_ourhome))
     thread.start()
 
     # return
@@ -184,30 +186,7 @@ def cjfresh():
     args = request.args.to_dict()
     menu_urls = [args.get(f"menu_url_{i}") for i in range(1, 7)]
 
-    # url -> image
-    imgs = []
-    for menu_url in menu_urls:
-        if menu_url:
-            r = requests.get(menu_url)
-            if r.status_code == requests.codes.ok:
-                imgs.append(BytesIO(r.content))
-                r.close()
-            else:
-                r.close()
-    # ocr
-    menu_images_list = []
-    menu_corners_list = []
-    menu_names_list = []
-    for img in imgs:
-        menu_images, menu_corners, menu_names = ocr_cjfresh(img)
-        menu_images_list.extend(menu_images)
-        menu_corners_list.extend(menu_corners)
-        menu_names_list.extend(menu_names)
-
-    # POST
-    menu_meta = {"corners": menu_corners_list, "names": menu_names_list}
-    thread = threading.Thread(target=post_image, args=(menu_images_list, menu_meta, backend_url))
-    # thread.daemon = True
+    thread = threading.Thread(target=ocr_and_post, args=(menu_urls, ocr_cjfresh))
     thread.start()
 
     # return
