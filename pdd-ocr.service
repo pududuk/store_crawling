@@ -5,6 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 User=ubuntu
+Environment=USER=ubuntu
 WorkingDirectory=/home/ubuntu/application/pududuk/store_crawling
 ExecStart=/home/ubuntu/application/pududuk/store_crawling/startup.sh
 Restart=on-failure
