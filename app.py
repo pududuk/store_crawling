@@ -5,19 +5,26 @@ from PIL import Image
 import numpy as np
 from paddleocr import PaddleOCR
 
+ocr_kr = PaddleOCR(
+    lang="korean",
+    use_doc_orientation_classify=False,
+    use_doc_unwarping=False,
+    use_textline_orientation=False,
+    det_model_dir='models/kor/det',
+    rec_model_dir='models/kor/rec',
+    cls_model_dir='models/kor/cls'
+)
+ocr_en = PaddleOCR(
+    lang="en",
+    use_doc_orientation_classify=False,
+    use_doc_unwarping=False,
+    use_textline_orientation=False,
+    det_model_dir='models/en/det',
+    rec_model_dir='models/en/rec',
+    cls_model_dir='models/en/cls'
+)
+
 def ocr_ourhome(file):
-    ocr_kr = PaddleOCR(
-        lang="korean",
-        use_doc_orientation_classify=False,
-        use_doc_unwarping=False,
-        use_textline_orientation=False,
-    )
-    ocr_en = PaddleOCR(
-        lang="en",
-        use_doc_orientation_classify=False,
-        use_doc_unwarping=False,
-        use_textline_orientation=False,
-    )    
 
     img_pil = Image.open(file)
     img = np.array(img_pil)
