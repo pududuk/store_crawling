@@ -1,8 +1,10 @@
 backend_url = "http://34.64.137.143:8080/api/menu/ocr-response"
+# backend_url = "http://127.0.0.1:8001/test"
 
 ##### 이 것을 구현
 from PIL import Image
 import numpy as np
+import skimage as ski
 from paddleocr import PaddleOCR
 import cv2
 import os
@@ -115,6 +117,7 @@ def ocr_cjfresh(file):
     img_g_bin = np.where((img_g < 130) | (img_g > 150), 255, img_g).astype(np.uint8)
 
     text_crop = img_g_bin[400:1000, 1100:1850]
+    text_crop = ski.morphology.dilation(text_crop)
     resized_text = cv2.resize(text_crop, (text_crop.shape[1] // 2, text_crop.shape[0] // 2))
     text_rgb = np.stack([resized_text] * 3, axis=-1)
     menu_names = ["".join(ocr_kr.predict(text_rgb)[0]["rec_texts"])]
