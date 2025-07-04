@@ -8,15 +8,16 @@ import skimage as ski
 from paddleocr import PaddleOCR
 import cv2
 import os
+import getpass
 
 ocr_kr = PaddleOCR(
     lang="korean",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir=f'/home/{os.getlogin()}/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_dir=f'/home/{getpass.getuser()}/.paddlex/official_models/PP-OCRv5_server_det',
     text_detection_model_name='PP-OCRv5_server_det',
-    text_recognition_model_dir=f'/home/{os.getlogin()}/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
+    text_recognition_model_dir=f'/home/{getpass.getuser()}/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
     text_recognition_model_name='korean_PP-OCRv5_mobile_rec',
 )
 ocr_en = PaddleOCR(
@@ -24,9 +25,9 @@ ocr_en = PaddleOCR(
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir=f'/home/{os.getlogin()}/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_dir=f'/home/{getpass.getuser()}/.paddlex/official_models/PP-OCRv5_server_det',
     text_detection_model_name='PP-OCRv5_server_det',
-    text_recognition_model_dir=f'/home/{os.getlogin()}/.paddlex/official_models/PP-OCRv5_server_rec',
+    text_recognition_model_dir=f'/home/{getpass.getuser()}/.paddlex/official_models/PP-OCRv5_server_rec',
     text_recognition_model_name='PP-OCRv5_server_rec',
 )
 
