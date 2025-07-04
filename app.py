@@ -10,12 +10,16 @@ ocr_kr = PaddleOCR(
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
+    text_detection_model_dir='~/.paddlex/official_models/PP-OCRv5_server_det',
+    text_recognition_model_dir='~/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
 )
 ocr_en = PaddleOCR(
     lang="en",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
+    text_detection_model_dir='~/.paddlex/official_models/PP-OCRv5_server_det',
+    text_recognition_model_dir='~/.paddlex/official_models/PP-OCRv5_server_rec',
 )
 
 def ocr_ourhome(file):
