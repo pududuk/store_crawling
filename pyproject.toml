@@ -1,0 +1,13 @@
+[project]
+name = "store-crawling"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.1.1",
+    "numpy>=2.3.1",
+    "paddleocr>=3.1.0",
+    "paddlepaddle>=3.1.0",
+    "setuptools>=80.9.0",
+]
