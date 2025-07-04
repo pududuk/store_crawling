@@ -1,2 +1,2 @@
 #!/bin/sh
-.venv/bin/flask run --host 0.0.0.0 --port 8001
+.venv/bin/gunicorn -w 2 -b 0.0.0.0:8001 app:app
