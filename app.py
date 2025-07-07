@@ -10,14 +10,16 @@ import cv2
 import os
 import getpass
 
+username = "ubuntu"
+
 ocr_kr = PaddleOCR(
     lang="korean",
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir=f'/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_dir=f'/home/{username}/.paddlex/official_models/PP-OCRv5_server_det',
     text_detection_model_name='PP-OCRv5_server_det',
-    text_recognition_model_dir=f'/home/ubuntu/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
+    text_recognition_model_dir=f'/home/{username}/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
     text_recognition_model_name='korean_PP-OCRv5_mobile_rec',
 )
 ocr_en = PaddleOCR(
@@ -25,9 +27,9 @@ ocr_en = PaddleOCR(
     use_doc_orientation_classify=False,
     use_doc_unwarping=False,
     use_textline_orientation=False,
-    text_detection_model_dir=f'/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det',
+    text_detection_model_dir=f'/home/{username}/.paddlex/official_models/PP-OCRv5_server_det',
     text_detection_model_name='PP-OCRv5_server_det',
-    text_recognition_model_dir=f'/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec',
+    text_recognition_model_dir=f'/home/{username}/.paddlex/official_models/PP-OCRv5_server_rec',
     text_recognition_model_name='PP-OCRv5_server_rec',
 )
 
@@ -140,7 +142,11 @@ def post_image(image_bytesio_list, image_meta, url):
                 (f'menu_{i+1}.png',image_bytesio_list[i].getvalue(), 'image/png')
             ) for i in range(len(image_bytesio_list))]
     form_data = image_meta
-    r = requests.post(url, files=files, data=form_data)
+    r = requests.post(url, files=files, data=form_data, timeout=5)
+    if r.status_code == requests.codes.ok:
+        pass
+    else:
+        print(f"Request timeout; Please check backend url : {backend_url}")
 
 def ocr_and_post(menu_urls, ocr_fn):
     # url -> image
@@ -164,7 +170,7 @@ def ocr_and_post(menu_urls, ocr_fn):
         menu_names_list.extend(menu_names)
 
     # POST
-    menu_meta = {"corners": menu_corners_list, "names": menu_names_list}
+    menu_meta = {"corners": ','.join(menu_corners_list), "names": ','.join(menu_names_list)}
     post_image(menu_images_list, menu_meta, backend_url)
 
 @app.route('/test', methods=["POST"])
