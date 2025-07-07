@@ -18,6 +18,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
+logger = logging.getLogger(__name__)
 
 _local = threading.local()
 
@@ -105,7 +106,8 @@ def ocr_cjfresh(file):
 
     # 메뉴 이미지 잘라내기
     menu_cropped = img[h_t:h_b, w_l:w_r]
-    buffer = BytesIO(Image.fromarray(menu_cropped))
+    buffer = BytesIO()
+    Image.fromarray(menu_cropped).save(buffer, format="PNG")
     buffer.seek(0)
     menu_imgs = [buffer.tobytes()]
 
@@ -161,7 +163,6 @@ def ocr_and_post(menu_urls, ocr_fn):
     menu_names_list = []
     for idx, img in enumerate(imgs):
         menu_images, menu_corners, menu_names = ocr_fn(img)
-        logging.info("OCR success")
         menu_images_list.extend(menu_images)
         menu_corners_list.extend(menu_corners)
         menu_names_list.extend(menu_names)
