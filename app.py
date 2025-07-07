@@ -109,7 +109,7 @@ def ocr_cjfresh(file):
     buffer = BytesIO()
     Image.fromarray(menu_cropped).save(buffer, format="PNG")
     buffer.seek(0)
-    menu_imgs = [buffer.tobytes()]
+    menu_imgs = [buffer]
 
     # 메뉴 이름 OCR (G 채널 활용)
     img_g = img[..., 1].copy()
