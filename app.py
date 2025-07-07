@@ -10,8 +10,14 @@ from paddleocr import PaddleOCR
 import os
 import getpass
 import threading
+import logging
 
 username = "ubuntu"
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 _local = threading.local()
 
@@ -129,7 +135,13 @@ def post_image(image_bytesio_list, image_meta, url):
                 (f'menu_{i+1}.png',image_bytesio_list[i].getvalue(), 'image/png')
             ) for i in range(len(image_bytesio_list))]
     form_data = image_meta
-    r = requests.post(url, files=files, data=form_data)
+    s = requests.Session()
+    r = requests.Request('POST', url, files=files, data=form_data)
+    p = s.prepare_request(r)
+    logging.debug(p.headers)
+    logging.debug(p.body[:500])
+    r = s.send(p)
+    logging.info("POST Success")
 
 
 def ocr_and_post(menu_urls, ocr_fn):
@@ -149,7 +161,7 @@ def ocr_and_post(menu_urls, ocr_fn):
     menu_names_list = []
     for idx, img in enumerate(imgs):
         menu_images, menu_corners, menu_names = ocr_fn(img)
-        print("OCR success")
+        logging.info("OCR success")
         menu_images_list.extend(menu_images)
         menu_corners_list.extend(menu_corners)
         menu_names_list.extend(menu_names)
@@ -157,12 +169,12 @@ def ocr_and_post(menu_urls, ocr_fn):
     # POST
     menu_meta = {"corners": ','.join(menu_corners_list), "names": ','.join(menu_names_list)}
     post_image(menu_images_list, menu_meta, backend_url)
-    print("POST success")
+    logging.info("POST success")
 
 @app.route('/test', methods=["POST"])
 def test():
-    print("data : ", request.form)
-    print("files: ", request.files)
+    logging.debug("data : ", request.form)
+    logging.debug("files: ", request.files)
     return {"success": True}
 
 @app.route("/ourhome")
