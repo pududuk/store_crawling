@@ -142,11 +142,12 @@ def post_image(image_bytesio_list, image_meta, url):
                 (f'menu_{i+1}.png',image_bytesio_list[i].getvalue(), 'image/png')
             ) for i in range(len(image_bytesio_list))]
     form_data = image_meta
-    r = requests.post(url, files=files, data=form_data, timeout=5)
-    if r.status_code == requests.codes.ok:
-        pass
-    else:
-        print(f"Request timeout; Please check backend url : {backend_url}")
+    r = requests.post(url, files=files, data=form_data)
+
+    # if r.status_code == requests.codes.ok:
+    #     pass
+    # else:
+    #     print(f"Request timeout; Please check backend url : {backend_url}")
 
 def ocr_and_post(menu_urls, ocr_fn):
     # url -> image
