@@ -20,11 +20,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-_local = threading.local()
-
 def get_ocr():
-    if not hasattr(_local, "ocr"):
-        _local.ocr = PaddleOCR(
+    return PaddleOCR(
             use_doc_orientation_classify=False,
             use_doc_unwarping=False,
             use_textline_orientation=False,
@@ -33,7 +30,6 @@ def get_ocr():
             text_recognition_model_dir=f'/home/{username}/.paddlex/official_models/korean_PP-OCRv5_mobile_rec',
             text_recognition_model_name='korean_PP-OCRv5_mobile_rec',
         )
-    return _local.ocr
 
 def ocr_ourhome(file):
     ocr = get_ocr()
