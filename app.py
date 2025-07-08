@@ -56,12 +56,12 @@ def ocr_ourhome(file):
         menu_corners = ["B1", "B1", "B1"]
     else:
         menu_corners = [
-            ocr.predict(np.repeat(img_y_split, 3, axis=-1))[0]["rec_texts"][0].replace(".", ",")
+            ocr.predict(np.repeat(img_y_split, 3, axis=-1))[0]["rec_texts"][0].replace(".", ",").replace(',','/')
             for img_y_split in menu_corners_in
         ]
 
     menu_names = [
-        ocr.predict(np.repeat(dilation(img_y_split[800:1000, :, None])[::2, ::2], 3, axis=-1))[0]["rec_texts"][0]
+        ocr.predict(np.repeat(dilation(img_y_split[800:1000, :, None])[::2, ::2], 3, axis=-1))[0]["rec_texts"][0].replace(',','/')
         for img_y_split in img_y_splits
     ]
 
@@ -93,7 +93,7 @@ def ocr_cjfresh(file):
     corner_img_in = img_y[60:250, 120:350, None]
     for _ in range(2):
         corner_img_in = erosion(corner_img_in)[::2, ::2]
-    menu_corners = [ocr.predict(np.repeat(corner_img_in, 3, axis=-1))[0]["rec_texts"][0][:2]]
+    menu_corners = [ocr.predict(np.repeat(corner_img_in, 3, axis=-1))[0]["rec_texts"][0][:2].replace(',','/')]
 
     w_l = np.where(img_y[:, :500].mean(axis=0) > 200)[0][-1].item()
     w_r = np.where(img_y[:, 500:].mean(axis=0) > 200)[0][0].item() + 500
@@ -115,7 +115,7 @@ def ocr_cjfresh(file):
     name_img_in = dilation(img_g[400:1000, 1100:1850, None])[::2, ::2]
     idxs = np.where(name_img_in.mean(axis=1) < 255)[0]
     name_img_in = name_img_in[(idxs[0] - 10) : (idxs[-1] + 10)]
-    menu_names = ["".join(ocr.predict(np.repeat(name_img_in, 3, axis=-1))[0]["rec_texts"]).replace(" ", "")]
+    menu_names = ["".join(ocr.predict(np.repeat(name_img_in, 3, axis=-1))[0]["rec_texts"]).replace(" ", "").replace(',','/')]
 
     return menu_imgs, menu_corners, menu_names
 
